@@ -1,11 +1,5 @@
 <template>
 
-  <img class="logo" src="@/assets/logo.png" alt="Logo">
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link> |
-    <router-link :to="{name: 'Login'}">Cerrar Sesión</router-link>
-  </div>
   <router-view/>
 </template>
 

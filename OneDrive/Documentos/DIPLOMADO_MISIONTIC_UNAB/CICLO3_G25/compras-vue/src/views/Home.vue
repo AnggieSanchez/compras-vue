@@ -1,5 +1,11 @@
 <template>
   <header>
+    <img class="logo" src="@/assets/logo.png" alt="Logo">
+  <div id="nav">
+    <router-link to="/">Registrar Compra</router-link> |
+    <router-link to="/compras">Lista de Compras</router-link> |
+    <router-link :to="{name:'Login'}">Cerrar Sesión</router-link>
+  </div>
     <h1>{{ titulo }}</h1>
   </header>
 
@@ -36,60 +42,25 @@
         <button @click.prevent="procesarInformacion">Agregar Compra</button>
       </form>
     </div>
-
-    <div>
-      <h2>Listado de Compras</h2>
-      <table border="1">
-        <thead>
-          <tr>
-            <th>CLIENTE</th>
-            <th>PRODUCTO</th>
-            <th>CANTIDAD</th>
-            <th>ENVÍO</th>
-            <th>DESCUENTO</th>
-            <th>TOTAL</th>
-          </tr>
-        </thead>
-        <tbody id="datos_compras">
-          <tr v-for="(unaCompra, i) in listaCompras" :key="i">
-            <td>{{ unaCompra.cliente }} ({{ unaCompra.documento }})</td>
-            <td>
-              {{ unaCompra.producto.nombre }} - ${{ unaCompra.producto.precio }}
-            </td>
-            <td>{{ unaCompra.cantidad }}</td>
-            <td>{{ nombresEnvio[unaCompra.envio] }}</td>
-            <td>${{ unaCompra.descuento }}</td>
-            <td>${{ unaCompra.total }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+   
   </main>
 </template>
 
 <script>
 // @ is an alias to /src
+import ProductoService from "@/services/productos.js";
+import CompraService from "@/services/compras.js";
 
 export default {
   mounted() {
-    let producto1 = { nombre: "Disco Duro", precio: 2000000 };
-    let producto2 = { nombre: "Teclado", precio: 100000 };
-    let producto3 = { nombre: "Mouse", precio: 80000 };
-    let producto4 = { nombre: "Pantalla", precio: 800000 };
-    let producto5 = { nombre: "Memoria USB", precio: 50000 };
-
-    this.listaProductos = [
-      producto1,
-      producto2,
-      producto3,
-      producto4,
-      producto5,
-    ];
+    this.listaProductos= ProductoService.obtenerTodos();
+    this.listaCompras = CompraService.obtenerTodos();
   },
+
   data() {
     return {
       listaProductos: [],
-      titulo: "Registro listado de compras",
+      titulo: "Registro de Compra",
       listaCompras: [],
       compra: {
         cliente: "",
@@ -144,6 +115,9 @@ export default {
       this.listaCompras.push(this.compra);
 
       this.limpiarFormulario();
+
+      this.$router.push({name:"Compras"})
+
     },
   },
   name: "Home",
